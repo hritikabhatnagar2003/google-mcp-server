@@ -22,6 +22,11 @@ class DraftRequest(BaseModel):
 app = FastAPI()
 
 
+@app.get('/')
+async def root():
+    return {'status': 'ok', 'message': 'Google MCP server running'}
+
+
 async def prompt_approval(action: str, payload: dict) -> str:
     # Allow non-interactive auto-approval via env var (useful in deployments)
     auto = os.environ.get('AUTO_APPROVE', '').lower()
