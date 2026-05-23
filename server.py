@@ -1,5 +1,6 @@
 import asyncio
 import os
+import logging
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
@@ -25,6 +26,13 @@ app = FastAPI()
 @app.get('/')
 async def root():
     return {'status': 'ok', 'message': 'Google MCP server running'}
+
+
+@app.on_event("startup")
+async def _log_routes():
+    logging.basicConfig(level=logging.INFO)
+    routes = [r.path for r in app.routes]
+    logging.info("Registered routes: %s", routes)
 
 
 async def prompt_approval(action: str, payload: dict) -> str:

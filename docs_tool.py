@@ -20,7 +20,7 @@ def append_to_doc(doc_id: str, content: str, creds=None):
     requests = [
         {
             'insertText': {
-                'location': {'index': max(1, end_index)},
+                'location': {'index': max(1, end_index - 1)},
                 'text': content,
             }
         }
