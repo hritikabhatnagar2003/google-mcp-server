@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GrowwPulse — Weekly Review Digest</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f6f9fc; color: #333333;">
+  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed; background-color: #f6f9fc;">
+    <tr>
+      <td align="center" style="padding: 20px 0;">
+        <table border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08); overflow: hidden;">
+          <!-- Header -->
+          <tr>
+            <td style="background-color: #00d09c; padding: 24px; text-align: center;">
+              <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 700;">📊 GrowwPulse</h1>
+              <p style="margin: 4px 0 0 0; color: rgba(255, 255, 255, 0.9); font-size: 14px;">Weekly App Review Digest &bull; {{DATE_RANGE}}</p>
+            </td>
+          </tr>
+          
+          <!-- Content Body -->
+          <tr>
+            <td style="padding: 24px;">
+              <!-- Section: Top Themes -->
+              <h2 style="margin-top: 0; margin-bottom: 12px; color: #1e293b; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #f1f5f9; padding-bottom: 6px;">🔥 Top Themes This Week</h2>
+              <ol style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.6; color: #334155;">
+                <li style="margin-bottom: 8px;"><strong>{{THEME_1_NAME}}</strong> &mdash; {{THEME_1_MENTIONS}} mentions, avg {{THEME_1_RATING}}★</li>
+                <li style="margin-bottom: 8px;"><strong>{{THEME_2_NAME}}</strong> &mdash; {{THEME_2_MENTIONS}} mentions, avg {{THEME_2_RATING}}★</li>
+                <li style="margin-bottom: 8px;"><strong>{{THEME_3_NAME}}</strong> &mdash; {{THEME_3_MENTIONS}} mentions, avg {{THEME_3_RATING}}★</li>
+              </ol>
+
+              <div style="height: 24px;"></div>
+
+              <!-- Section: User Quotes -->
+              <h2 style="margin-top: 0; margin-bottom: 12px; color: #1e293b; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #f1f5f9; padding-bottom: 6px;">💬 User Voices (Anonymized)</h2>
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 14px; line-height: 1.5; color: #475569;">
+                <tr>
+                  <td style="padding: 10px; background-color: #f8fafc; border-left: 4px solid #00d09c; border-radius: 0 4px 4px 0; margin-bottom: 12px; display: block;">
+                    <span style="font-style: italic;">"{{QUOTE_1}}"</span>
+                    <div style="margin-top: 6px; font-size: 12px; color: #94a3b8; font-weight: 600;">★{{QUOTE_1_RATING}} &bull; {{QUOTE_1_SOURCE}}</div>
+                  </td>
+                </tr>
+                <tr><td style="height: 12px;"></td></tr>
+                <tr>
+                  <td style="padding: 10px; background-color: #f8fafc; border-left: 4px solid #00d09c; border-radius: 0 4px 4px 0; margin-bottom: 12px; display: block;">
+                    <span style="font-style: italic;">"{{QUOTE_2}}"</span>
+                    <div style="margin-top: 6px; font-size: 12px; color: #94a3b8; font-weight: 600;">★{{QUOTE_2_RATING}} &bull; {{QUOTE_2_SOURCE}}</div>
+                  </td>
+                </tr>
+                <tr><td style="height: 12px;"></td></tr>
+                <tr>
+                  <td style="padding: 10px; background-color: #f8fafc; border-left: 4px solid #00d09c; border-radius: 0 4px 4px 0; display: block;">
+                    <span style="font-style: italic;">"{{QUOTE_3}}"</span>
+                    <div style="margin-top: 6px; font-size: 12px; color: #94a3b8; font-weight: 600;">★{{QUOTE_3_RATING}} &bull; {{QUOTE_3_SOURCE}}</div>
+                  </td>
+                </tr>
+              </table>
+
+              <div style="height: 24px;"></div>
+
+              <!-- Section: Action Ideas -->
+              <h2 style="margin-top: 0; margin-bottom: 12px; color: #1e293b; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #f1f5f9; padding-bottom: 6px;">💡 Action Ideas</h2>
+              <ol style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.6; color: #334155;">
+                <li style="margin-bottom: 8px;">{{ACTION_1}}</li>
+                <li style="margin-bottom: 8px;">{{ACTION_2}}</li>
+                <li style="margin-bottom: 8px;">{{ACTION_3}}</li>
+              </ol>
+            </td>
+          </tr>
+          
+          <!-- Footer -->
+          <tr>
+            <td style="background-color: #f8fafc; border-top: 1px solid #e2e8f0; padding: 16px 24px; text-align: center; font-size: 12px; color: #64748b;">
+              Reviews analyzed: {{TOTAL_REVIEWS}} &bull; Period: {{DATE_RANGE}} &bull; Sources: App Store, Play Store
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

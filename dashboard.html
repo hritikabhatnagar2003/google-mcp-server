@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GrowwPulse — Weekly Review Intelligence</title>
+  <!-- Outfit Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-canvas: #0A0F14;
+      --bg-surface: #131A22;
+      --bg-surface-hover: #1A242F;
+      --border-surface: rgba(255, 255, 255, 0.08);
+      --accent-green: #00D09C;
+      --accent-green-alpha: rgba(0, 208, 156, 0.1);
+      --accent-red: #F87171;
+      --accent-red-alpha: rgba(248, 113, 113, 0.1);
+      --text-primary: #FFFFFF;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-canvas);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-canvas);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-green);
+    }
+
+    /* Global Header */
+    .header {
+      height: 70px;
+      border-bottom: 1px solid var(--border-surface);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      position: sticky;
+      top: 0;
+      background: rgba(10, 15, 20, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 24px;
+      height: 24px;
+      color: var(--accent-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-text {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-item a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s ease;
+      position: relative;
+      padding: 6px 0;
+    }
+
+    .nav-item a:hover {
+      color: var(--text-primary);
+    }
+
+    .nav-item.active a {
+      color: var(--accent-green);
+    }
+
+    .nav-item.active a::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--accent-green);
+      border-radius: 2px 2px 0 0;
+      box-shadow: 0 -2px 10px rgba(0, 208, 156, 0.4);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .calendar-widget {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-surface);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .action-btn {
+      background: linear-gradient(135deg, var(--accent-green), #059669);
+      color: #0A0F14;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 14px rgba(0, 208, 156, 0.3);
+    }
+
+    .action-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0, 208, 156, 0.45);
+    }
+
+    .action-btn:active {
+      transform: translateY(1px);
+    }
+
+    .action-btn:disabled {
+      background: var(--text-muted);
+      color: var(--bg-surface);
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .profile-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      color: #0A0F14;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 32px 40px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* Headline Section */
+    .headline {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .headline h1 {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .headline h1 span {
+      color: var(--accent-green);
+      text-shadow: 0 0 20px rgba(0, 208, 156, 0.2);
+    }
+
+    .headline p {
+      color: var(--text-secondary);
+      font-size: 15px;
+    }
+
+    /* Metrics Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .metric-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-surface);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(5px);
+    }
+
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+    }
+
+    .metric-header {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .metric-body {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .metric-value {
+      font-family: var(--font-display);
+      font-size: 38px;
+      font-weight: 700;
+    }
+
+    .metric-trend {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .metric-trend.positive {
+      color: var(--accent-green);
+    }
+
+    .metric-trend.negative {
+      color: var(--accent-red);
+    }
+
+    /* Gauge Graphic */
+    .gauge-container {
+      position: absolute;
+      right: 24px;
+      bottom: 12px;
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gauge-emoji {
+      position: absolute;
+      font-size: 20px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      line-height: 1;
+    }
+
+    /* Sparkline Graphic */
+    .sparkline-svg {
+      width: 80px;
+      height: 35px;
+      stroke: var(--accent-green);
+      stroke-width: 2.5;
+      fill: none;
+    }
+
+    /* Split Workspace Layout */
+    .workspace {
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    /* Left Sidebar */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .sidebar-section {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-surface);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .sidebar-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Analysis Themes Vertical List */
+    .theme-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .theme-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .theme-item:hover {
+      background: var(--bg-surface-hover);
+      border-color: rgba(255, 255, 255, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .theme-item.active {
+      background: rgba(0, 208, 156, 0.04);
+      border-color: rgba(0, 208, 156, 0.15);
+    }
+
+    .theme-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--accent-green);
+      box-shadow: 2px 0 10px rgba(0, 208, 156, 0.4);
+    }
+
+    .theme-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-width: 75%;
+    }
+
+    .theme-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .theme-desc {
+      font-size: 11px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .theme-stats {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .theme-count {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .theme-trend {
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* Executive Brief */
+    .brief-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .brief-sparkles {
+      color: var(--accent-green);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .brief-copy-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .brief-copy-btn:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .brief-content {
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    /* Executive Brief Native Styling */
+    .brief-section-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .brief-section-title:first-of-type {
+      margin-top: 0;
+    }
+
+    .brief-themes-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-left: 0;
+      margin-bottom: 20px;
+    }
+
+    .brief-themes-list li {
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .brief-themes-list li strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .brief-quotes-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .brief-quote-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-left: 3px solid var(--accent-green);
+      border-radius: 4px 8px 8px 4px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .brief-quote-card:nth-child(even) {
+      border-left-color: var(--accent-red);
+    }
+    
+    .brief-quote-card:nth-child(3n) {
+      border-left-color: var(--text-muted);
+    }
+
+    .brief-quote-text {
+      font-size: 12px;
+      font-style: italic;
+      line-height: 1.5;
+      color: #E2E8F0;
+    }
+
+    .brief-quote-meta {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .brief-actions-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-left: 0;
+    }
+
+    .brief-actions-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
+
+    .action-num {
+      background: rgba(0, 208, 156, 0.1);
+      color: var(--accent-green);
+      font-size: 10px;
+      font-weight: 700;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .action-text {
+      flex: 1;
+    }
+
+    /* Main Feed (Right Column) */
+    .main-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Filtering Controls Row */
+    .filters-bar {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-surface);
+      border-radius: 16px;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .search-container {
+      flex: 1;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border-surface);
+      border-radius: 10px;
+      padding: 10px 16px 10px 40px;
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent-green);
+      box-shadow: 0 0 10px rgba(0, 208, 156, 0.15);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 13px;
+      color: var(--text-muted);
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .filter-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* Toggles & Pills */
+    .toggle-group {
+      display: flex;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-surface);
+      border-radius: 10px;
+      padding: 4px;
+    }
+
+    .toggle-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .toggle-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .toggle-btn.active {
+      background: var(--bg-surface-hover);
+      color: var(--accent-green);
+      border: 1px solid rgba(0, 208, 156, 0.2);
+    }
+
+    .pills-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .pill-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-surface);
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .pill-btn:hover {
+      border-color: rgba(255,255,255,0.15);
+      color: var(--text-primary);
+    }
+
+    .pill-btn.active {
+      background: var(--accent-green);
+      color: #0A0F14;
+      border-color: var(--accent-green);
+    }
+
+    /* Reviews Feed List */
+    .reviews-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-height: 400px;
+    }
+
+    .review-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-surface);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .review-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(0, 208, 156, 0.15);
+    }
+
+    .review-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-family: var(--font-display);
+      font-size: 14px;
+      color: #FFFFFF;
+      background: linear-gradient(135deg, #10B981, #00D09C);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+
+    .user-details {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .user-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .review-meta {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .review-stars {
+      display: flex;
+      gap: 4px;
+    }
+
+    .star-icon {
+      font-size: 14px;
+      color: var(--accent-green);
+    }
+    .star-icon.empty {
+      color: rgba(255, 255, 255, 0.1);
+    }
+
+    .review-body {
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: #E2E8F0;
+    }
+
+    .pii-redacted {
+      background: rgba(248, 113, 113, 0.1);
+      border: 1px dashed rgba(248, 113, 113, 0.25);
+      color: var(--accent-red);
+      padding: 0px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .review-footer {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tag-pill {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .tag-pill.theme-tag {
+      background: var(--accent-green-alpha);
+      color: var(--accent-green);
+      border: 1px solid rgba(0, 208, 156, 0.15);
+    }
+
+    .tag-pill.source-tag {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-surface);
+    }
+
+    /* Loading and Empty States */
+    .state-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 64px 0;
+      color: var(--text-secondary);
+      gap: 16px;
+      text-align: center;
+      background: var(--bg-surface);
+      border-radius: 16px;
+      border: 1px dashed var(--border-surface);
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255, 255, 255, 0.05);
+      border-top-color: var(--accent-green);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Modal / Alert Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--bg-surface);
+      border-left: 4px solid var(--accent-green);
+      border-radius: 6px;
+      padding: 16px 24px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      color: var(--text-primary);
+      font-size: 14px;
+      z-index: 1000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Global Header -->
+  <header class="header">
+    <div class="logo-container">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+        </svg>
+      </div>
+      <span class="logo-text">GrowwPulse</span>
+    </div>
+    <ul class="nav-menu">
+      <li class="nav-item active"><a href="#">Pulse</a></li>
+      <li class="nav-item"><a href="#themes">Themes</a></li>
+      <li class="nav-item"><a href="#reviews">Reviews</a></li>
+      <li class="nav-item"><a href="#summary">Summary</a></li>
+    </ul>
+    <div class="header-actions">
+      <button class="action-btn" id="generate-btn" onclick="triggerReportGeneration()">
+        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+        Generate AI Report & Draft
+      </button>
+      <div class="calendar-widget" id="calendar-widget">
+        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        <span id="week-label">Loading...</span>
+      </div>
+      <div class="profile-badge">GP</div>
+    </div>
+  </header>
+
+  <main class="container">
+    
+    <!-- Headline Section -->
+    <section class="headline">
+      <h1>GrowwPulse — <span>Weekly Review Intelligence</span></h1>
+      <p>Automated App Store & Play Store customer voice analysis for the current review window.</p>
+    </section>
+
+    <!-- Metrics Row -->
+    <section class="metrics-grid">
+      <!-- Ingested Reviews -->
+      <div class="metric-card">
+        <div class="metric-header">Reviews Ingested</div>
+        <div class="metric-body">
+          <div class="metric-value" id="metric-reviews">---</div>
+          <div class="metric-trend positive" id="metric-reviews-trend">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+            +12.4%
+          </div>
+        </div>
+        <!-- Sparkline decoration -->
+        <div style="position: absolute; right: 24px; bottom: 12px;">
+          <svg class="sparkline-svg" viewBox="0 0 80 35">
+            <path d="M 0,25 Q 10,20 20,30 T 40,15 T 60,25 T 80,10" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Average Rating -->
+      <div class="metric-card">
+        <div class="metric-header">Average Rating</div>
+        <div class="metric-body">
+          <div class="metric-value" id="metric-rating">---</div>
+          <div class="metric-trend positive" style="color: var(--accent-green); font-size: 13px;">
+            <span>★</span> Stable
+          </div>
+        </div>
+        <!-- Circular rating progress gauge -->
+        <div class="gauge-container">
+          <svg viewBox="0 0 36 36" width="60" height="60">
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3" />
+            <path id="gauge-circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--accent-green)" stroke-width="3" stroke-dasharray="84, 100" />
+          </svg>
+          <span class="gauge-emoji">😊</span>
+        </div>
+      </div>
+
+      <!-- Critical Mentions -->
+      <div class="metric-card">
+        <div class="metric-header">Critical Mentions (1-3★)</div>
+        <div class="metric-body">
+          <div class="metric-value" id="metric-critical">---</div>
+          <div class="metric-trend negative" id="metric-critical-trend">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="7" y1="7" x2="17" y2="17"></line>
+              <polyline points="17 7 17 17 7 17"></polyline>
+            </svg>
+            -4.2%
+          </div>
+        </div>
+        <!-- Critical warning decoration icon -->
+        <div style="position: absolute; right: 24px; bottom: 12px; color: var(--accent-red); opacity: 0.15;">
+          <svg viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Workspace split pane -->
+    <section class="workspace">
+      
+      <!-- Left Column: Themes Selector & Executive Brief -->
+      <div class="sidebar">
+        
+        <!-- Analysis Themes -->
+        <div class="sidebar-section">
+          <div class="sidebar-title">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l-7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+            Analysis Themes
+          </div>
+          <div class="theme-list" id="theme-list">
+            <!-- Loaded dynamically -->
+            <div class="theme-item active" onclick="selectTheme('all')">
+              <div class="theme-info">
+                <div class="theme-name">All Review Categories</div>
+                <div class="theme-desc">Consolidated view of all reviews</div>
+              </div>
+              <div class="theme-stats">
+                <div class="theme-count" id="theme-count-all">...</div>
+                <div class="theme-trend" style="color: var(--accent-green)">-</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Executive Brief (Pulse Summary) -->
+        <div class="sidebar-section">
+          <div class="brief-header">
+            <div class="brief-sparkles">
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+              Executive Brief
+            </div>
+            <button class="brief-copy-btn" onclick="copyPulseToClipboard()" title="Copy to clipboard">
+              <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+              </svg>
+            </button>
+          </div>
+          <div class="brief-content" id="pulse-brief-box">
+            Loading latest weekly pulse note...
+          </div>
+          
+          <div class="brief-list-section">
+            <div>
+              <div class="brief-list-title drivers">
+                <span class="bullet-icon">⚡</span> KEY DRIVERS
+              </div>
+              <ul class="brief-bullets" id="brief-drivers-list">
+                <li class="brief-bullet-item"><span class="bullet-icon" style="color: var(--accent-green)">✓</span> Strong UX reviews appreciating stock search</li>
+                <li class="brief-bullet-item"><span class="bullet-icon" style="color: var(--accent-green)">✓</span> Fast onboarding flow for new investors</li>
+              </ul>
+            </div>
+            <div>
+              <div class="brief-list-title friction">
+                <span class="bullet-icon">⚠️</span> CRITICAL FRICTION
+              </div>
+              <ul class="brief-bullets" id="brief-friction-list">
+                <li class="brief-bullet-item"><span class="bullet-icon" style="color: var(--accent-red)">-</span> UI lags reported on chart loaders</li>
+                <li class="brief-bullet-item"><span class="bullet-icon" style="color: var(--accent-red)">-</span> Verification delay for document upload</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Filters and Feed -->
+      <div class="main-panel">
+        
+        <!-- Filter controls panel -->
+        <div class="filters-bar">
+          
+          <!-- Search input -->
+          <div class="search-container">
+            <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="search-input" class="search-input" placeholder="Search customer voice..." oninput="handleFilterChange()">
+          </div>
+
+          <!-- Store toggle buttons -->
+          <div class="filter-group">
+            <span class="filter-label">Source</span>
+            <div class="toggle-group">
+              <button class="toggle-btn active" id="store-all" onclick="setStoreFilter('all')">All</button>
+              <button class="toggle-btn" id="store-ios" onclick="setStoreFilter('App Store')">App Store</button>
+              <button class="toggle-btn" id="store-android" onclick="setStoreFilter('Play Store')">Play Store</button>
+            </div>
+          </div>
+
+          <!-- Star Rating filter pills -->
+          <div class="filter-group">
+            <span class="filter-label">Rating</span>
+            <div class="pills-group">
+              <button class="pill-btn active" id="rating-all" onclick="setRatingFilter('all')">All</button>
+              <button class="pill-btn" id="rating-5" onclick="setRatingFilter(5)">5 ★</button>
+              <button class="pill-btn" id="rating-4" onclick="setRatingFilter(4)">4 ★</button>
+              <button class="pill-btn" id="rating-3" onclick="setRatingFilter(3)">3 ★</button>
+              <button class="pill-btn" id="rating-2" onclick="setRatingFilter(2)">2 ★</button>
+              <button class="pill-btn" id="rating-1" onclick="setRatingFilter(1)">1 ★</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Dynamic reviews list -->
+        <div class="reviews-feed" id="reviews-feed">
+          <div class="state-container">
+            <div class="loading-spinner"></div>
+            <p>Fetching review index database...</p>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Notification Toast -->
+  <div class="toast" id="toast-message">
+    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-green)">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <span id="toast-text">Text copied!</span>
+  </div>
+
+  <script>
+    // State managers
+    let reviewsData = [];
+    let themesData = {};
+    let activeTheme = 'all';
+    let activeStore = 'all';
+    let activeRating = 'all';
+    
+    // Formatting helpers
+    function anonymizeName(name) {
+      if (!name) return 'Anonymous';
+      const clean = name.trim();
+      if (clean.includes(' ')) {
+        const parts = clean.split(' ');
+        const first = parts[0];
+        const last = parts[parts.length - 1];
+        return `${first.charAt(0)}**** ${last.charAt(0)}.`;
+      }
+      if (clean.length > 2) {
+        return `${clean.charAt(0)}****${clean.charAt(clean.length - 1)}`;
+      }
+      return clean;
+    }
+
+    function formatTimeAgo(dateString) {
+      if (!dateString) return '';
+      const date = new Date(dateString);
+      const now = new Date();
+      const diffMs = now - date;
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      
+      if (diffDays <= 0) return 'Today';
+      if (diffDays === 1) return 'Yesterday';
+      if (diffDays < 7) return `${diffDays} days ago`;
+      if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+      return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function formatNumber(num) {
+      if (num >= 1000) {
+        return (num / 1000).toFixed(1) + 'k';
+      }
+      return num;
+    }
+
+    // Load pipeline metrics and details
+    async function loadDashboardData() {
+      try {
+        // 1. Fetch Themes analysis report
+        const themesRes = await fetch('/data/outputs/theme_analysis_current.json');
+        if (!themesRes.ok) throw new Error('Theme report not found');
+        themesData = await themesRes.json();
+
+        // 2. Fetch processed reviews dataset
+        let reviewsRes = await fetch('/data/processed/reviews_classified.json');
+        if (!reviewsRes.ok) {
+          reviewsRes = await fetch('/data/processed/reviews_current_window.json');
+        }
+        if (!reviewsRes.ok) throw new Error('Reviews index not found');
+        reviewsData = await reviewsRes.json();
+
+        // Update metrics indicators
+        document.getElementById('week-label').textContent = `Week of ${themesData.week || 'Current'}`;
+        document.getElementById('metric-reviews').textContent = reviewsData.length.toLocaleString();
+        
+        // Calculate average rating
+        let totalRating = 0;
+        reviewsData.forEach(r => totalRating += r.rating);
+        const avgRating = (totalRating / reviewsData.length).toFixed(2);
+        document.getElementById('metric-rating').textContent = avgRating;
+
+        // Update gauge stroke-dasharray (percentage of 5 stars)
+        const ratingPct = Math.round((avgRating / 5) * 100);
+        document.getElementById('gauge-circle').setAttribute('stroke-dasharray', `${ratingPct}, 100`);
+
+        // Count critical reviews (1-3 stars)
+        const criticalCount = reviewsData.filter(r => r.rating <= 3).length;
+        document.getElementById('metric-critical').textContent = criticalCount;
+
+        // Render themes list in sidebar
+        renderThemesList();
+
+        // Load executive summary brief
+        await loadExecutiveBrief();
+
+        // Render reviews feed
+        handleFilterChange();
+
+      } catch (err) {
+        console.error('❌ Data loading error:', err);
+        document.getElementById('reviews-feed').innerHTML = `
+          <div class="state-container" style="border-color: var(--accent-red)">
+            <p style="color: var(--accent-red)">⚠️ Failed to connect to local database</p>
+            <p style="font-size: 13px;">Please make sure the dashboard server is running and you have executed the pipeline.</p>
+          </div>
+        `;
+      }
+    }
+
+    async function loadExecutiveBrief() {
+      try {
+        const res = await fetch('/data/outputs/pulse_current.html');
+        if (res.ok) {
+          const htmlText = await res.text();
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(htmlText, 'text/html');
+          
+          let briefHtml = '';
+          const headings = Array.from(doc.querySelectorAll('h2, h3'));
+          
+          // 1. Top Themes
+          const themesHeading = headings.find(h => /theme/i.test(h.textContent));
+          if (themesHeading) {
+            const list = themesHeading.nextElementSibling;
+            if (list && (list.tagName === 'OL' || list.tagName === 'UL')) {
+              briefHtml += `
+                <div class="brief-section-title">
+                  <span class="brief-section-icon">🔥</span> TOP THEMES THIS WEEK
+                </div>
+                <ul class="brief-themes-list">
+              `;
+              Array.from(list.children).forEach(li => {
+                briefHtml += `<li>${li.innerHTML}</li>`;
+              });
+              briefHtml += `</ul>`;
+            }
+          }
+          
+          // 2. User Voices
+          const voicesHeading = headings.find(h => /voice|quote/i.test(h.textContent));
+          if (voicesHeading) {
+            let container = voicesHeading.nextElementSibling;
+            if (container) {
+              briefHtml += `
+                <div class="brief-section-title">
+                  <span class="brief-section-icon">💬</span> USER VOICES (ANONYMIZED)
+                </div>
+                <div class="brief-quotes-container">
+              `;
+              
+              const tableRows = container.tagName === 'TABLE' ? Array.from(container.querySelectorAll('tr')) : [];
+              if (tableRows.length > 0) {
+                tableRows.forEach(row => {
+                  const td = row.querySelector('td');
+                  if (td && td.textContent.trim()) {
+                    const span = td.querySelector('span');
+                    const div = td.querySelector('div');
+                    if (span && div) {
+                      briefHtml += `
+                        <div class="brief-quote-card">
+                          <p class="brief-quote-text">${span.textContent.trim()}</p>
+                          <span class="brief-quote-meta">${div.textContent.trim()}</span>
+                        </div>
+                      `;
+                    } else {
+                      const textVal = td.textContent.trim();
+                      if (textVal.includes('★')) {
+                        const parts = textVal.split('—');
+                        const qText = parts[0] ? parts[0].trim() : '';
+                        const qMeta = parts[1] ? parts[1].trim() : '';
+                        briefHtml += `
+                          <div class="brief-quote-card">
+                            <p class="brief-quote-text">${qText}</p>
+                            <span class="brief-quote-meta">${qMeta}</span>
+                          </div>
+                        `;
+                      }
+                    }
+                  }
+                });
+              } else {
+                const spans = Array.from(container.querySelectorAll('span'));
+                if (spans.length > 0) {
+                  for (let i = 0; i < spans.length; i += 2) {
+                    const text = spans[i] ? spans[i].textContent : '';
+                    const meta = spans[i+1] ? spans[i+1].textContent : '';
+                    if (text) {
+                      briefHtml += `
+                        <div class="brief-quote-card">
+                          <p class="brief-quote-text">${text}</p>
+                          <span class="brief-quote-meta">${meta}</span>
+                        </div>
+                      `;
+                    }
+                  }
+                }
+              }
+              briefHtml += `</div>`;
+            }
+          }
+          
+          // 3. Action Ideas
+          const actionsHeading = headings.find(h => /action|idea/i.test(h.textContent));
+          if (actionsHeading) {
+            const list = actionsHeading.nextElementSibling;
+            if (list && (list.tagName === 'OL' || list.tagName === 'UL')) {
+              briefHtml += `
+                <div class="brief-section-title">
+                  <span class="brief-section-icon">💡</span> ACTION IDEAS
+                </div>
+                <ul class="brief-actions-list">
+              `;
+              Array.from(list.children).forEach((li, idx) => {
+                briefHtml += `
+                  <li>
+                    <span class="action-num">${idx + 1}</span>
+                    <span class="action-text">${li.innerHTML}</span>
+                  </li>
+                `;
+              });
+              briefHtml += `</ul>`;
+            }
+          }
+          
+          if (briefHtml) {
+            document.getElementById('pulse-brief-box').innerHTML = briefHtml;
+            const placeholders = document.querySelector('.brief-list-section');
+            if (placeholders) placeholders.style.display = 'none';
+            return;
+          }
+        }
+        
+        // Fallback: load markdown file
+        const mdRes = await fetch('/data/outputs/pulse_current.md');
+        if (mdRes.ok) {
+          const md = await mdRes.text();
+          const paras = md.split('\n\n').map(p => {
+            if (p.includes('TOP THEMES')) {
+              return `<div class="brief-section-title"><span class="brief-section-icon">🔥</span> TOP THEMES THIS WEEK</div>`;
+            }
+            if (p.includes('USER VOICES')) {
+              return `<div class="brief-section-title"><span class="brief-section-icon">💬</span> USER VOICES (ANONYMIZED)</div>`;
+            }
+            if (p.includes('ACTION IDEAS')) {
+              return `<div class="brief-section-title"><span class="brief-section-icon">💡</span> ACTION IDEAS</div>`;
+            }
+            if (p.includes('━━━')) return '';
+            return `<p style="font-size:12.5px; line-height:1.5; margin-bottom:10px;">${p.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p>`;
+          }).filter(Boolean).join('');
+          document.getElementById('pulse-brief-box').innerHTML = paras;
+          
+          const placeholders = document.querySelector('.brief-list-section');
+          if (placeholders) placeholders.style.display = 'none';
+        }
+      } catch (e) {
+        console.warn('Failed to load pulse executive brief file:', e);
+      }
+    }
+
+    function renderThemesList() {
+      const listContainer = document.getElementById('theme-list');
+      // Save the default "All Review Categories" item
+      const allItemCount = reviewsData.length;
+      document.getElementById('theme-count-all').textContent = formatNumber(allItemCount);
+
+      // Render category items
+      if (themesData.themes && Array.isArray(themesData.themes)) {
+        themesData.themes.forEach(theme => {
+          const item = document.createElement('div');
+          item.className = 'theme-item';
+          item.id = `theme-item-${theme.name.replace(/\s+/g, '-')}`;
+          item.onclick = () => selectTheme(theme.name);
+
+          // Customize descriptions
+          let desc = 'Voice of customer reviews';
+          if (theme.name.includes('UX')) desc = 'Interface design, visual layout';
+          if (theme.name.includes('Stability')) desc = 'Crashes, hangs, chart loading';
+          if (theme.name.includes('Transactions')) desc = 'Order delays, payments';
+          if (theme.name.includes('Support')) desc = 'Agent response, tickets';
+          if (theme.name.includes('KYC')) desc = 'Onboarding validation';
+
+          // Trend color and direction symbol
+          const trendText = theme.trend || '';
+          let color = 'var(--text-secondary)';
+          if (trendText.includes('↓') || trendText.includes('-')) {
+            color = 'var(--accent-red)';
+          } else if (trendText.includes('↑') || trendText.includes('+')) {
+            color = 'var(--accent-green)';
+          }
+
+          item.innerHTML = `
+            <div class="theme-info">
+              <div class="theme-name">${theme.name}</div>
+              <div class="theme-desc">${desc}</div>
+            </div>
+            <div class="theme-stats">
+              <div class="theme-count">${formatNumber(theme.mention_count || 0)}</div>
+              <div class="theme-trend" style="color: ${color}">${trendText}</div>
+            </div>
+          `;
+          listContainer.appendChild(item);
+        });
+      }
+    }
+
+    // Active actions
+    function selectTheme(themeName) {
+      activeTheme = themeName;
+      
+      // Update sidebar visual indicators
+      document.querySelectorAll('.theme-item').forEach(el => el.classList.remove('active'));
+      if (themeName === 'all') {
+        document.getElementById('theme-list').children[0].classList.add('active');
+      } else {
+        const id = `theme-item-${themeName.replace(/\s+/g, '-')}`;
+        const target = document.getElementById(id);
+        if (target) target.classList.add('active');
+      }
+
+      handleFilterChange();
+    }
+
+    function setStoreFilter(storeName) {
+      activeStore = storeName;
+      document.querySelectorAll('.toggle-btn').forEach(el => el.classList.remove('active'));
+      if (storeName === 'all') document.getElementById('store-all').classList.add('active');
+      if (storeName === 'App Store') document.getElementById('store-ios').classList.add('active');
+      if (storeName === 'Play Store') document.getElementById('store-android').classList.add('active');
+      
+      handleFilterChange();
+    }
+
+    function setRatingFilter(ratingValue) {
+      activeRating = ratingValue;
+      document.querySelectorAll('.pill-btn').forEach(el => el.classList.remove('active'));
+      if (ratingValue === 'all') document.getElementById('rating-all').classList.add('active');
+      else document.getElementById(`rating-${ratingValue}`).classList.add('active');
+
+      handleFilterChange();
+    }
+
+    function handleFilterChange() {
+      const feed = document.getElementById('reviews-feed');
+      const searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
+
+      // Filter dataset
+      const filtered = reviewsData.filter(review => {
+        // 1. Theme Filter
+        // 1. Theme Filter
+        if (activeTheme !== 'all') {
+          // If review has no theme, it belongs to UX / Interface as fallback
+          const revTheme = review.primaryTheme || review.classification?.theme || 'UX / Interface';
+          if (revTheme !== activeTheme) return false;
+        }
+
+        // 2. Store Filter
+        if (activeStore !== 'all') {
+          const expectedSource = activeStore === 'App Store' ? 'app_store' : 'play_store';
+          if (review.source !== expectedSource) {
+            return false;
+          }
+        }
+
+        // 3. Rating Filter
+        if (activeRating !== 'all' && review.rating !== activeRating) {
+          return false;
+        }
+
+        // 4. Text Search Filter
+        if (searchQuery) {
+          const body = review.text.toLowerCase();
+          const author = (review.userName || '').toLowerCase();
+          if (!body.includes(searchQuery) && !author.includes(searchQuery)) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+
+      // Render cards
+      if (filtered.length === 0) {
+        feed.innerHTML = `
+          <div class="state-container">
+            <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted)">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="8" y1="12" x2="16" y2="12"></line>
+            </svg>
+            <p>No customer reviews match your active filter matrix</p>
+          </div>
+        `;
+        return;
+      }
+
+      feed.innerHTML = '';
+      
+      // Paginated or capped preview (render top 50 reviews for smooth layout rendering)
+      const previewLimit = filtered.slice(0, 50);
+
+      previewLimit.forEach(review => {
+        const card = document.createElement('div');
+        card.className = 'review-card';
+
+        // Anonymize user name
+        const displayName = anonymizeName(review.userName);
+        const relativeTime = formatTimeAgo(review.date);
+        
+        // Stars HTML
+        let starsHtml = '';
+        for (let i = 1; i <= 5; i++) {
+          if (i <= review.rating) {
+            starsHtml += '<span class="star-icon">★</span>';
+          } else {
+            starsHtml += '<span class="star-icon empty">★</span>';
+          }
+        }
+
+        // Highlight PII redactions
+        let bodyHtml = review.text
+          .replace(/\[EMAIL\]/g, '<span class="pii-redacted">[Email Redacted]</span>')
+          .replace(/\[PHONE\]/g, '<span class="pii-redacted">[Phone Redacted]</span>')
+          .replace(/\[AADHAAR\]/g, '<span class="pii-redacted">[Aadhaar Redacted]</span>')
+          .replace(/\[PAN\]/g, '<span class="pii-redacted">[PAN Redacted]</span>')
+          .replace(/\[USER_ID\]/g, '<span class="pii-redacted">[User ID Redacted]</span>')
+          .replace(/\[CLIENT_CODE\]/g, '<span class="pii-redacted">[Client Code Redacted]</span>');
+
+        // Extract theme and rating score tags
+        // Extract theme and rating score tags
+        const themeLabel = review.primaryTheme || review.classification?.theme || 'UX / Interface';
+        const sourceLabel = review.source === 'app_store' ? 'App Store 🍎' : 'Play Store 🤖';
+
+        // Avatar Initial
+        const initial = displayName.charAt(0).toUpperCase();
+
+        card.innerHTML = `
+          <div class="review-header">
+            <div class="user-info">
+              <div class="user-avatar">${initial}</div>
+              <div class="user-details">
+                <span class="user-name">${displayName}</span>
+                <span class="review-meta">${relativeTime} • ${sourceLabel}</span>
+              </div>
+            </div>
+            <div class="review-stars">
+              ${starsHtml}
+            </div>
+          </div>
+          <div class="review-body">
+            ${bodyHtml}
+          </div>
+          <div class="review-footer">
+            <span class="tag-pill theme-tag">${themeLabel}</span>
+            <span class="tag-pill source-tag">RATING: ${review.rating}★</span>
+            <span class="tag-pill helpful-tag" style="background-color: var(--accent-green-alpha); color: var(--accent-green); border: 1px solid rgba(0, 208, 156, 0.2);">👍 Helpful Voice</span>
+          </div>
+        `;
+        feed.appendChild(card);
+      });
+
+      if (filtered.length > 50) {
+        const loadMoreIndicator = document.createElement('div');
+        loadMoreIndicator.style.textAlign = 'center';
+        loadMoreIndicator.style.color = 'var(--text-muted)';
+        loadMoreIndicator.style.fontSize = '13px';
+        loadMoreIndicator.style.padding = '12px';
+        loadMoreIndicator.textContent = `Showing top 50 of ${filtered.length} matching reviews.`;
+        feed.appendChild(loadMoreIndicator);
+      }
+    }
+
+    // Action methods
+    function copyPulseToClipboard() {
+      const containerText = document.getElementById('pulse-brief-box').innerText;
+      navigator.clipboard.writeText(containerText).then(() => {
+        showToast('Pulse note copied to clipboard!');
+      }).catch(err => {
+        console.error('Copy failure:', err);
+      });
+    }
+
+    function showToast(text) {
+      const toast = document.getElementById('toast-message');
+      document.getElementById('toast-text').textContent = text;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    async function triggerReportGeneration() {
+      const btn = document.getElementById('generate-btn');
+      const originalText = btn.innerHTML;
+      
+      try {
+        btn.disabled = true;
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="3" fill="none" style="animation: spin 0.8s linear infinite; margin-right: 4px;">
+            <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.2)"></circle>
+            <path d="M4 12a8 8 0 0 1 8-8" stroke="#0A0F14"></path>
+          </svg>
+          Generating Report...
+        `;
+        
+        console.log('Sending API call to generate pulse report...');
+        const response = await fetch('/api/generate-pulse', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ mockData: false })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+          showToast('✨ AI Report & Docs Created!');
+          
+          btn.innerHTML = `
+            <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="3" fill="none" style="margin-right: 4px; color: #00D09C;">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            Done! Redirecting...
+          `;
+          
+          setTimeout(() => {
+             window.location.href = 'https://docs.google.com/document/d/1gGe28j6X5Vd-y7X1Fnz9GLgtyUdwmv-lFr7cYvsuLnQ/edit';
+          }, 1500);
+
+          // Refresh the dashboard data
+          await loadDashboardData();
+        } else {
+          showToast(`❌ Failed: ${data.error || 'Unknown error'}`);
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+        }
+      } catch (err) {
+        console.error('API call failed:', err);
+        showToast(`❌ Error: ${err.message}`);
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+      }
+    }
+
+    // Run loader
+    document.addEventListener('DOMContentLoaded', loadDashboardData);
+  </script>
+</body>
+</html>

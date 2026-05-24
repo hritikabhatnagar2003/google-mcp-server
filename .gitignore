@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Environment and Secrets
+.env
+.env.local
+.env.*.local
+config/credentials.json
+config/token.json
+credentials.json
+token.json
+
+# Local databases and caches
+.eslintcache
+.parcel-cache
+.cache
+
+# Editor / OS files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Output/Data directories (optional, but good for keeping repo clean)
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/outputs/*
+!data/outputs/.gitkeep
+logs/
+*.log

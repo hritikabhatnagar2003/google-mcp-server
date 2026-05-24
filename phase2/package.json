@@ -1,0 +1,17 @@
+{
+  "name": "growwpulse-phase2",
+  "version": "1.0.0",
+  "description": "GrowwPulse Phase 2: Review Data Ingestion Pipeline",
+  "main": "src/testMcp.js",
+  "scripts": {
+    "test-mcp": "node src/testMcp.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.1",
+    "dotenv": "^16.4.5",
+    "google-play-scraper": "^10.1.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

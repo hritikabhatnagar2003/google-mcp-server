@@ -1,0 +1,36 @@
+{
+  "email": {
+    "recipients": [
+      "your-email@gmail.com"
+    ],
+    "autoSend": false,
+    "subjectPrefix": "📊 GrowwPulse"
+  },
+  "ingestion": {
+    "reviewWindowWeeks": 12,
+    "appStoreId": "1404871703",
+    "playStoreAppId": "com.nextbillion.groww",
+    "maxReviewsPerSource": 10000
+  },
+  "classification": {
+    "maxThemes": 5,
+    "topThemesInPulse": 3,
+    "classifierMode": "hybrid",
+    "llmBatchSize": 25
+  },
+  "generator": {
+    "maxWords": 250,
+    "quotesCount": 3,
+    "actionIdeasCount": 3
+  },
+  "delivery": {
+    "gmail": true,
+    "googleDocs": true,
+    "docsArchiveName": "GrowwPulse Weekly Archive",
+    "googleDocId": "1gGe28j6X5Vd-y7X1Fnz9GLgtyUdwmv-lFr7cYvsuLnQ"
+  },
+  "logging": {
+    "level": "info",
+    "file": "data/outputs/pipeline.log"
+  }
+}

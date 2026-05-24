@@ -1,0 +1,13 @@
+node_modules/
+.env
+config/credentials.json
+config/token.json
+credentials.json
+token.json
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/outputs/*
+!data/outputs/.gitkeep
+*.log
