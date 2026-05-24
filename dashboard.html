@@ -1203,7 +1203,9 @@
       try {
         if (apiData) {
           themesData = apiData.classificationReport || themesData;
-          // Keep existing reviewsData, as Vercel APIs won't persist new reviews JSON
+          if (apiData.reviewsData && apiData.reviewsData.length > 0) {
+            reviewsData = apiData.reviewsData;
+          }
         } else {
           // 1. Fetch Themes analysis report
           const themesRes = await fetch('/data/outputs/theme_analysis_current.json');

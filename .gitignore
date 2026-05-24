@@ -30,17 +30,8 @@ Thumbs.db
 *.sln
 *.sw?
 
-# Output/Data directories (optional, but good for keeping repo clean)
-data/raw/*
-!data/raw/.gitkeep
-data/processed/*
-!data/processed/.gitkeep
-!data/processed/reviews_classified.json
-!data/processed/reviews_current_window.json
-data/outputs/*
-!data/outputs/.gitkeep
-!data/outputs/theme_analysis_current.json
-!data/outputs/pulse_current.html
-!data/outputs/pulse_current.md
+# Output/Data directories
+# Removed data/ exclusions because Vercel's deployer ignores negative patterns (!)
 logs/
+*.log
 *.log

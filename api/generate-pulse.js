@@ -42,13 +42,22 @@ module.exports = async function handler(req, res) {
 
     const htmlContent = fs.readFileSync(generatorResult.files.currentHtml, 'utf8');
 
+    // Read the newly classified reviews to send back to the frontend
+    const basePath = process.env.VERCEL ? '/tmp/data' : require('path').join(__dirname, '../data');
+    const reviewsPath = require('path').join(basePath, 'processed/reviews_classified.json');
+    let reviewsData = [];
+    if (fs.existsSync(reviewsPath)) {
+      reviewsData = JSON.parse(fs.readFileSync(reviewsPath, 'utf8'));
+    }
+
     return res.status(200).json({
       success: true,
       message: 'Weekly report generated successfully.',
       metadata: generatorResult.metadata,
       delivery: deliveryReport,
       classificationReport: classificationReport,
-      pulseHtml: htmlContent
+      pulseHtml: htmlContent,
+      reviewsData: reviewsData
     });
   } catch (err) {
     console.error('❌ [API] Generation failed:', err);
