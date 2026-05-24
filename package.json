@@ -4,7 +4,7 @@
   "description": "Weekly App Store and Play Store review pulse generator using MCP servers",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/server.js",
+    "start:local": "node src/server.js",
     "pulse": "node src/index.js",
     "test-mcp": "node src/testMcp.js",
     "test": "node --test tests/**/*.test.js",
