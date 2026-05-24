@@ -1,0 +1,77 @@
+{
+  "week": "2026-05-18 to 2026-05-24",
+  "week_iso": "2026-W21",
+  "reviews_analyzed_count": 1087,
+  "generated_at": "2026-05-24T05:53:42.472Z",
+  "themes": [
+    {
+      "name": "App Stability & Performance",
+      "mention_count": 407,
+      "avg_rating": 1.7,
+      "composite_score": 1750.1,
+      "trend": "→ flat vs last week",
+      "rank": 1
+    },
+    {
+      "name": "Transactions & Orders",
+      "mention_count": 213,
+      "avg_rating": 2,
+      "composite_score": 852,
+      "trend": "→ flat vs last week",
+      "rank": 2
+    },
+    {
+      "name": "Customer Support",
+      "mention_count": 135,
+      "avg_rating": 2.01,
+      "composite_score": 538.65,
+      "trend": "→ flat vs last week",
+      "rank": 3
+    },
+    {
+      "name": "UX / Interface",
+      "mention_count": 315,
+      "avg_rating": 4.45,
+      "composite_score": 488.25,
+      "trend": "→ flat vs last week",
+      "rank": 4
+    },
+    {
+      "name": "Onboarding & KYC",
+      "mention_count": 17,
+      "avg_rating": 2.18,
+      "composite_score": 64.94,
+      "trend": "→ flat vs last week",
+      "rank": 5
+    }
+  ],
+  "selected_quotes": [
+    {
+      "id": "2d8fc7ef0742c4a1e567f9cb8e9b4d62df1d6d4eec01a5618ee1aa9ac7b9df7b",
+      "rating": 1,
+      "title": null,
+      "text": "it's been more than a year raised multiple complaints about slow app loading in the morning and evening session but their development team unableto fix this bug",
+      "date": "2026-05-14",
+      "source": "play_store",
+      "primaryTheme": "App Stability & Performance"
+    },
+    {
+      "id": "9da064bc01157aa1619a728419ee0a31e7c8d6c6e084fbedc7cefc0c3e26e76b",
+      "rating": 1,
+      "title": null,
+      "text": "don't use it if you want your money to be safe..this app lags too much ,they charge High but app and it's customer support is pathetic..this app is not for traders you will lose your money if right time entry and exit will not work with app function",
+      "date": "2026-05-13",
+      "source": "play_store",
+      "primaryTheme": "Transactions & Orders"
+    },
+    {
+      "id": "b57045d2b29705c85617e80a4242ac083c4ed226eac92db5cd427e986c11179b",
+      "rating": 3,
+      "title": null,
+      "text": "Customer care service is not good. Groww provide Customer care call back under 15 min but after 24 hours not support me. No call, No Msg my Complen ticket automatically closed from Groww.",
+      "date": "2026-04-03",
+      "source": "play_store",
+      "primaryTheme": "Customer Support"
+    }
+  ]
+}
