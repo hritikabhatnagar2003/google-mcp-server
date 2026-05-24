@@ -1207,30 +1207,44 @@
             reviewsData = apiData.reviewsData;
           }
         } else {
-          // 1. Fetch Themes analysis report
-          const themesRes = await fetch('/data/outputs/theme_analysis_current.json');
-          if (themesRes.ok) {
-            themesData = await themesRes.json();
+          // 1. Fetch Themes analysis report (non-fatal if missing)
+          try {
+            const themesRes = await fetch('/data/outputs/theme_analysis_current.json');
+            console.log('[Dashboard] themes fetch status:', themesRes.status, themesRes.url);
+            if (themesRes.ok) {
+              themesData = await themesRes.json();
+            }
+          } catch (e) {
+            console.warn('[Dashboard] Could not load themes:', e.message);
           }
 
-          // 2. Fetch processed reviews dataset
-          let reviewsRes = await fetch('/data/processed/reviews_classified.json');
-          if (!reviewsRes.ok) {
-            reviewsRes = await fetch('/data/processed/reviews_current_window.json');
-          }
-          if (reviewsRes.ok) {
-            reviewsData = await reviewsRes.json();
+          // 2. Fetch processed reviews dataset (try classified first, fallback to window)
+          try {
+            let reviewsRes = await fetch('/data/processed/reviews_classified.json');
+            console.log('[Dashboard] reviews_classified fetch status:', reviewsRes.status, reviewsRes.url);
+            if (!reviewsRes.ok) {
+              reviewsRes = await fetch('/data/processed/reviews_current_window.json');
+              console.log('[Dashboard] reviews_current_window fetch status:', reviewsRes.status, reviewsRes.url);
+            }
+            if (reviewsRes.ok) {
+              reviewsData = await reviewsRes.json();
+              console.log('[Dashboard] Loaded', reviewsData.length, 'reviews');
+            } else {
+              console.error('[Dashboard] Both reviews files returned non-OK status');
+            }
+          } catch (e) {
+            console.error('[Dashboard] Could not load reviews:', e.message);
           }
         }
 
-        // Update metrics indicators
+        // Update metrics indicators (safe even if reviewsData is empty)
         document.getElementById('week-label').textContent = `Week of ${themesData.week || 'Current'}`;
         document.getElementById('metric-reviews').textContent = reviewsData.length.toLocaleString();
         
         // Calculate average rating
         let totalRating = 0;
         reviewsData.forEach(r => totalRating += r.rating);
-        const avgRating = (totalRating / reviewsData.length).toFixed(2);
+        const avgRating = reviewsData.length > 0 ? (totalRating / reviewsData.length).toFixed(2) : '0.00';
         document.getElementById('metric-rating').textContent = avgRating;
 
         // Update gauge stroke-dasharray (percentage of 5 stars)
@@ -1255,7 +1269,7 @@
         document.getElementById('reviews-feed').innerHTML = `
           <div class="state-container" style="border-color: var(--accent-red)">
             <p style="color: var(--accent-red)">⚠️ Failed to load data</p>
-            <p style="font-size: 13px;">Please make sure the API is responsive.</p>
+            <p style="font-size: 13px;">Error: ${err.message}</p>
           </div>
         `;
       }
