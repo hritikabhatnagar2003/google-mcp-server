@@ -35,7 +35,12 @@ data/raw/*
 !data/raw/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
+!data/processed/reviews_classified.json
+!data/processed/reviews_current_window.json
 data/outputs/*
 !data/outputs/.gitkeep
+!data/outputs/theme_analysis_current.json
+!data/outputs/pulse_current.html
+!data/outputs/pulse_current.md
 logs/
 *.log
