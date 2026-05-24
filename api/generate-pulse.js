@@ -4,7 +4,7 @@ const classification = require('../src/classification/index');
 const generator = require('../src/generator/index');
 const delivery = require('../src/delivery/index');
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
