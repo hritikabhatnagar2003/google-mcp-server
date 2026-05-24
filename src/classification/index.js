@@ -54,8 +54,9 @@ function getWeekRangeString(dateObj) {
  */
 async function runClassification(options = {}) {
   const settingsPath = options.settingsPath || path.join(__dirname, '../../config/settings.json');
-  const reviewsPath = options.reviewsPath || path.join(__dirname, '../../data/processed/reviews_current_window.json');
-  const outputsDir = options.outputsDir || path.join(__dirname, '../../data/outputs');
+  const basePath = process.env.VERCEL ? '/tmp/data' : path.join(__dirname, '../../data');
+  const reviewsPath = options.reviewsPath || path.join(basePath, 'processed/reviews_current_window.json');
+  const outputsDir = options.outputsDir || path.join(basePath, 'outputs');
 
   console.log('🏁 Starting Theme Classification Engine...');
 

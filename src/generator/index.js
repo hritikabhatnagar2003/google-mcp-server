@@ -31,9 +31,10 @@ function ensureDir(dirPath) {
  */
 async function runGenerator(options = {}) {
   const settingsPath = options.settingsPath || path.join(__dirname, '../../config/settings.json');
-  const reportPath = options.reportPath || path.join(__dirname, '../../data/outputs/theme_analysis_current.json');
+  const basePath = process.env.VERCEL ? '/tmp/data' : path.join(__dirname, '../../data');
+  const reportPath = options.reportPath || path.join(basePath, 'outputs/theme_analysis_current.json');
   const templatesDir = options.templatesDir || path.join(__dirname, '../../templates');
-  const outputsDir = options.outputsDir || path.join(__dirname, '../../data/outputs');
+  const outputsDir = options.outputsDir || path.join(basePath, 'outputs');
 
   console.log('🏁 Starting Weekly Pulse Note Generator...');
 

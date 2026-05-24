@@ -27,9 +27,9 @@ if (fs.existsSync(CONFIG_PATH)) {
   }
 }
 
-// Define paths
-const RAW_DIR = path.resolve(__dirname, '../../data/raw');
-const PROCESSED_DIR = path.resolve(__dirname, '../../data/processed');
+const basePath = process.env.VERCEL ? '/tmp/data' : path.resolve(__dirname, '../../data');
+const RAW_DIR = path.join(basePath, 'raw');
+const PROCESSED_DIR = path.join(basePath, 'processed');
 const PROCESSED_FILE = path.join(PROCESSED_DIR, 'reviews_current_window.json');
 
 /**

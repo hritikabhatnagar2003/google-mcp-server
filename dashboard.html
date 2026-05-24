@@ -1199,20 +1199,27 @@
     }
 
     // Load pipeline metrics and details
-    async function loadDashboardData() {
+    async function loadDashboardData(apiData = null) {
       try {
-        // 1. Fetch Themes analysis report
-        const themesRes = await fetch('/data/outputs/theme_analysis_current.json');
-        if (!themesRes.ok) throw new Error('Theme report not found');
-        themesData = await themesRes.json();
+        if (apiData) {
+          themesData = apiData.classificationReport || themesData;
+          // Keep existing reviewsData, as Vercel APIs won't persist new reviews JSON
+        } else {
+          // 1. Fetch Themes analysis report
+          const themesRes = await fetch('/data/outputs/theme_analysis_current.json');
+          if (themesRes.ok) {
+            themesData = await themesRes.json();
+          }
 
-        // 2. Fetch processed reviews dataset
-        let reviewsRes = await fetch('/data/processed/reviews_classified.json');
-        if (!reviewsRes.ok) {
-          reviewsRes = await fetch('/data/processed/reviews_current_window.json');
+          // 2. Fetch processed reviews dataset
+          let reviewsRes = await fetch('/data/processed/reviews_classified.json');
+          if (!reviewsRes.ok) {
+            reviewsRes = await fetch('/data/processed/reviews_current_window.json');
+          }
+          if (reviewsRes.ok) {
+            reviewsData = await reviewsRes.json();
+          }
         }
-        if (!reviewsRes.ok) throw new Error('Reviews index not found');
-        reviewsData = await reviewsRes.json();
 
         // Update metrics indicators
         document.getElementById('week-label').textContent = `Week of ${themesData.week || 'Current'}`;
@@ -1236,7 +1243,7 @@
         renderThemesList();
 
         // Load executive summary brief
-        await loadExecutiveBrief();
+        await loadExecutiveBrief(apiData ? apiData.pulseHtml : null);
 
         // Render reviews feed
         handleFilterChange();
@@ -1245,18 +1252,24 @@
         console.error('❌ Data loading error:', err);
         document.getElementById('reviews-feed').innerHTML = `
           <div class="state-container" style="border-color: var(--accent-red)">
-            <p style="color: var(--accent-red)">⚠️ Failed to connect to local database</p>
-            <p style="font-size: 13px;">Please make sure the dashboard server is running and you have executed the pipeline.</p>
+            <p style="color: var(--accent-red)">⚠️ Failed to load data</p>
+            <p style="font-size: 13px;">Please make sure the API is responsive.</p>
           </div>
         `;
       }
     }
 
-    async function loadExecutiveBrief() {
+    async function loadExecutiveBrief(htmlContent = null) {
       try {
-        const res = await fetch('/data/outputs/pulse_current.html');
-        if (res.ok) {
-          const htmlText = await res.text();
+        let htmlText = htmlContent;
+        if (!htmlText) {
+          const res = await fetch('/data/outputs/pulse_current.html');
+          if (res.ok) {
+            htmlText = await res.text();
+          }
+        }
+        
+        if (htmlText) {
           const parser = new DOMParser();
           const doc = parser.parseFromString(htmlText, 'text/html');
           
@@ -1671,8 +1684,8 @@
              window.location.href = 'https://docs.google.com/document/d/1gGe28j6X5Vd-y7X1Fnz9GLgtyUdwmv-lFr7cYvsuLnQ/edit';
           }, 1500);
 
-          // Refresh the dashboard data
-          await loadDashboardData();
+          // Refresh the dashboard data with the returned payload
+          await loadDashboardData(data);
         } else {
           showToast(`❌ Failed: ${data.error || 'Unknown error'}`);
           btn.disabled = false;
